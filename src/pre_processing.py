@@ -156,6 +156,7 @@ class PreProcess():
         df['isced'] = df['education']
         df = df.replace(dict(isced=dic))
         df.isced[df['isced'] == '-1'] = "None"
+        print(colored('education column is coded...', 'green'))
 
         return df
 
@@ -177,6 +178,7 @@ class PreProcess():
 
         # Remove numbers
         df.removed_stopwords = df.removed_stopwords.str.replace('\d+', '')
+        print(colored('text is clean...', 'green'))
         return df
 
 
