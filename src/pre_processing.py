@@ -8,13 +8,14 @@ import pandas as pd
 import nltk
 from termcolor import colored
 # nltk.download('punkt')
-from nltk.tokenize import sent_tokenize
+# from nltk.tokenize import sent_tokenize
 import string
-from string import punctuation
+# from string import punctuation
 from sklearn.feature_extraction import stop_words
 
 
 pd.set_option('display.expand_frame_repr', False)
+
 
 class PreProcess():
     """
@@ -41,9 +42,8 @@ class PreProcess():
         print('\033[1m \033[94m Original dataset shape:\033[0m \033[0m {}\n'.format(df.shape))
         # drop rows with all null values
         df = df.dropna(axis='rows', how='all')
-        print(
-            '\033[1m \033[94m Shape of dataset after dropping the rows containing all null values:\033[0m \033[0m {}\n'.
-                format(df.shape))
+        print('\033[1m \033[94m Shape of dataset after dropping the rows containing all null values:\033[0m \033[0m {}\n'.
+            format(df.shape))
 
         # drop rows in which the education field is empty
         df = df.dropna(subset=['education'])
@@ -180,14 +180,3 @@ class PreProcess():
         df.removed_stopwords = df.removed_stopwords.str.replace('\d+', '')
         print(colored('text is clean...', 'green'))
         return df
-
-
-
-
-
-
-
-
-
-
-
