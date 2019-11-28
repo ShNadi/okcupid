@@ -4,7 +4,7 @@ import pandas as pd
 from termcolor import colored
 
 
-def main_func(pprocess=False, analyze=False, func='summary_stat', type='#anwps_freq', sex=False):
+def main_func(pprocess=False, analyze=False, func='summary_stat', type='#anwps_freq', sex=False, age=False):
     if(pprocess==True):
         cupid_df = pd.read_csv('../data/raw/profiles.csv', usecols = ['education', 'essay0', 'essay1', 'essay2',
                                                                       'essay3', 'essay7', 'essay8', 'essay9', 'age', 'sex'])
@@ -38,6 +38,7 @@ def main_func(pprocess=False, analyze=False, func='summary_stat', type='#anwps_f
 
 
 main_func(pprocess = False)
-main_func(analyze = True, func='plot', type = 'isced', sex=False)
+main_func(analyze = False, func='plot', type = 'isced', sex=False)
+main_func(analyze = True, func='plot', type = 'sex_age')
 
 
