@@ -36,9 +36,36 @@ def main_func(pprocess=False, analyze=False, func='summary_stat', type='#anwps_f
 
 
 
+"""
+    Main function:
 
-main_func(pprocess = False)
-main_func(analyze = False, func='plot', type = 'isced', sex=False)
-main_func(analyze = True, func='plot', type = 'sex_age')
+    -- set pprocess=True for doing pre_processing 
+        --- pre_processing includes:
+            ---- checking missing values
+            ---- merging essays as a unique text
+            ---- removing stop words
+            ---- removing html tags
+            ---- recoding education feature
+            ---- removing punctuation
+            ---- count the number of sentences and words
+        the pre_processing function writes the preprocessed data set as csv file in 'data/preprocessed' path
+        
+    -- set analyze=False and func='summary_stat':
+        --- writes statistical summary of data set as a csv and json file in 'results/figures'
+    -- set analyze=True, func=plot and:
+        --- type='#anwps_freq' to draw plot of average number of words per sentence
+        --- type='isced_freq' and sex=True to draw plot of frequency of participants based of their sex and level of education
+        --- type='isced_freq' and sex=False to draw plot of overall frequency of participants based on level of education
+        --- type='boxplot' and sex=False to draw boxplot of the average number of words per sentence
+        --- type='boxplot' and sex=True to draw boxplot of the average number of words per sentence for male and female
+        --- type='common_words' to draw bar chart of top 30 common words
+        --- type='word_cloud' to draw word cloud of 100 most frequent words
+"""
+
+main_func(pprocess=False)
+main_func(analyze=True, func='plot', type='isced_freq', sex=False)
+main_func(analyze=False, func='plot', type='sex_age')
 
 
+# TODO: add list of education levels
+# TODO: documentation
