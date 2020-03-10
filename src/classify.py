@@ -63,63 +63,63 @@ class Classifier():
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
 
-        def logistic_text_meta(self, df):
-            df['sex'].mask(df['sex'].isin(['m']), 0.0, inplace=True)
-            df['sex'].mask(df['sex'].isin(['f']), 1.0, inplace=True)
-            # print(df['sex'].value_counts())
+    def logistic_text_meta(self, df):
+        df['sex'].mask(df['sex'].isin(['m']), 0.0, inplace=True)
+        df['sex'].mask(df['sex'].isin(['f']), 1.0, inplace=True)
+        # print(df['sex'].value_counts())
 
-            df['isced'].mask(df['isced'].isin([3.0, 5.0]), 1.0, inplace=True)
-            df['isced'].mask(df['isced'].isin([6.0, 7.0]), 8.0, inplace=True)
+        df['isced'].mask(df['isced'].isin([3.0, 5.0]), 1.0, inplace=True)
+        df['isced'].mask(df['isced'].isin([6.0, 7.0]), 8.0, inplace=True)
 
-            print(sorted(Counter(df['isced']).items()))
-            df = df.dropna(subset=['clean_text', 'isced'])
+        print(sorted(Counter(df['isced']).items()))
+        df = df.dropna(subset=['clean_text', 'isced'])
 
-            corpus = df[['clean_text', 'count_char', 'count_word', '#anwps',
-                         'count_punct', 'avg_wordlength', 'count_misspelled',
-                         'word_uniqueness', 'age', 'sex', 'readability']]
-            target = df["isced"]
+        corpus = df[['clean_text', 'count_char', 'count_word', '#anwps',
+                     'count_punct', 'avg_wordlength', 'count_misspelled',
+                     'word_uniqueness', 'age', 'sex']]
+        target = df["isced"]
 
-            # vectorization
-            X_train, X_val, y_train, y_val = train_test_split(corpus, target,
-                                                              train_size=0.75,
-                                                              test_size=0.25,
-                                                              random_state=0)
+        # vectorization
+        X_train, X_val, y_train, y_val = train_test_split(corpus, target,
+                                                          train_size=0.75,
+                                                          test_size=0.25,
+                                                          random_state=0)
 
-            get_text_data = FunctionTransformer(lambda x: x['clean_text'],
-                                                validate=False)
-            get_numeric_data = FunctionTransformer(lambda x: x[
-                ['count_char', 'count_word', '#anwps', 'count_punct',
-                 'avg_wordlength', 'count_misspelled', 'word_uniqueness',
-                 'age', 'sex', 'readability']], validate=False)
+        get_text_data = FunctionTransformer(lambda x: x['clean_text'],
+                                            validate=False)
+        get_numeric_data = FunctionTransformer(lambda x: x[
+            ['count_char', 'count_word', '#anwps', 'count_punct',
+             'avg_wordlength', 'count_misspelled', 'word_uniqueness',
+             'age', 'sex']].astype(float), validate=False)
 
-            # merge vectorized text data and scaled numeric data
-            process_and_join_features = Pipeline([
-                ('features', FeatureUnion([
-                    ('numeric_features', Pipeline([
-                        ('selector', get_numeric_data),
-                        ('scaler', preprocessing.StandardScaler())
+        # merge vectorized text data and scaled numeric data
+        process_and_join_features = Pipeline([
+            ('features', FeatureUnion([
+                ('numeric_features', Pipeline([
+                    ('selector', get_numeric_data),
+                    ('scaler', preprocessing.StandardScaler())
 
-                    ])),
-                    ('text_features', Pipeline([
-                        ('selector', get_text_data),
-                        ('vec',
-                         CountVectorizer(binary=False, ngram_range=(1, 2),
-                                         lowercase=True))
-                    ]))
                 ])),
-                ('clf', LogisticRegression(random_state=0, max_iter=1000,
-                                           solver='lbfgs', penalty='l2',
-                                           class_weight='balanced'))
-            ])
+                ('text_features', Pipeline([
+                    ('selector', get_text_data),
+                    ('vec',
+                     CountVectorizer(binary=False, ngram_range=(1, 2),
+                                     lowercase=True))
+                ]))
+            ])),
+            ('clf', LogisticRegression(random_state=0, max_iter=1000,
+                                       solver='lbfgs', penalty='l2',
+                                       class_weight='balanced'))
+        ])
 
-            # merge vectorized text data and scaled numeric data
-            process_and_join_features.fit(X_train, y_train)
-            predictions = process_and_join_features.predict(X_val)
+        # merge vectorized text data and scaled numeric data
+        process_and_join_features.fit(X_train, y_train)
+        predictions = process_and_join_features.predict(X_val)
 
-            print("Final Accuracy for Logistic: %s" % accuracy_score(
-                y_val, predictions))
-            cm = confusion_matrix(y_val, predictions)
-            plt.figure()
-            self.plot_confusion_matrix(
-                cm, classes=[0, 1], normalize=False, title='Confusion Matrix')
-            print(classification_report(y_val, predictions))
+        print("Final Accuracy for Logistic: %s" % accuracy_score(
+            y_val, predictions))
+        cm = confusion_matrix(y_val, predictions)
+        plt.figure()
+        self.plot_confusion_matrix(
+            cm, classes=[0, 1], normalize=False, title='Confusion Matrix')
+        print(classification_report(y_val, predictions))
