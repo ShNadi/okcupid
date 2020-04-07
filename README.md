@@ -1,4 +1,4 @@
-# OkCupid
+# OkCupid analysis
 
 Version 0.1.0
 
