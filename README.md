@@ -2,7 +2,7 @@
 
 Version 0.1.0
 
-In this project we are going to extract the Ok Cupid members educational background based the way they answered to the essays.
+In this project we are going to extract the Ok Cupid members educational background based on the way they answered to the essays.
 
 
 ## Project organization
