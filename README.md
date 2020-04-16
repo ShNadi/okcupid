@@ -1,9 +1,28 @@
 # OkCupid
 
 Version 0.1.0
+# OkCupid classifier
+project to extract the OkCupid members educational background based the way they answered to the essays.
 
-In this project we are going to extract the Ok Cupid members educational background based the way they answered to the essays.
+## Researcher & engineers
 
+Researcher:
+
+- Corten, R. (Rense)
+
+Engineer:
+
+- Shiva Nadi Najafabadi
+
+
+## Installation
+
+This project requires Python 3.5 or higher. Install the dependencies with the
+code below.
+
+```sh
+pip install -r requirements.txt
+```
 
 ## Project organization
 
@@ -39,3 +58,11 @@ This project is licensed under the terms of the [MIT License](/LICENSE.md)
 ## Citation
 
 Please [cite this project as described here](/CITATION.md).
+
+
+
+
+
+
+
+
