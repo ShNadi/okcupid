@@ -1,0 +1,15 @@
+sklearn
+pandas
+nltk
+termcolor
+seaborn
+matplotlib
+collections
+wordcloud
+numpy
+itertools
+string
+readability
+textblob
+spellchecker
+tqdm
