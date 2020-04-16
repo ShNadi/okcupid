@@ -1,8 +1,9 @@
-# OkCupid
+# OkCupid Stylometry Analysis Project
 
 Version 0.1.0
 # OkCupid classifier
-project to extract the OkCupid members educational background based the way they answered to the essays.
+
+This project aims to examine to what extent educational background can be inferred from the written text, based on the assumption that educational levels are associated with the style of writing. This includes people's signature fashion of using certain vocabulary of words which makes their literature unique and recognizable. Using a large public dataset of almost 60000 dating profiles, we aimed to model author style to be used as a predictor of educational background.
 
 ## Researcher & engineers
 
@@ -12,7 +13,7 @@ Researcher:
 
 Engineer:
 
-- Shiva Nadi Najafabadi
+- Shiva Nadi
 
 
 ## Installation
@@ -58,11 +59,3 @@ This project is licensed under the terms of the [MIT License](/LICENSE.md)
 ## Citation
 
 Please [cite this project as described here](/CITATION.md).
-
-
-
-
-
-
-
-
