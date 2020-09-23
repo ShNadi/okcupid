@@ -164,10 +164,10 @@ def main_func(pprocess=False, analyze=False, meta=False, classification=False,
     -- set meta_data=True for calculating user specific features
         ---
 """
-
-main_func(pprocess=True)
-main_func(analyze=False, func='plot', type='isced_freq', sex=False)
-# main_func(analyze=False, func='plot', type='sex_age')
-main_func(meta=False)
-main_func(classification=False)
+if __name__ == "__main__":
+    main_func(pprocess=True)
+    main_func(analyze=False, func='plot', type='isced_freq', sex=False)
+    # main_func(analyze=False, func='plot', type='sex_age')
+    main_func(meta=False)
+    main_func(classification=False)
 
