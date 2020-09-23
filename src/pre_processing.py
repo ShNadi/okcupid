@@ -1,29 +1,22 @@
 """
-This page contains functions for pre_processing OkCupid data_set.
+This page contains functions for preprocessing OkCupid data_set.
 
-It seems that it has to have THIS docstring with a summary line, a blank line
-and some more text like here. Wow.
 """
 import pandas as pd
 import nltk
 from termcolor import colored
-# nltk.download('punkt')
-# from nltk.tokenize import sent_tokenize
+nltk.download('punkt')
+from nltk.tokenize import sent_tokenize
 import string
-# from string import punctuation
+from string import punctuation
 from sklearn.feature_extraction import stop_words
-
-
 pd.set_option('display.expand_frame_repr', False)
 
 
 class PreProcess():
     """
-    This page contains functions for pre_processing OkCupid data_set.
+    This page contains functions for preprocessing OkCupid dataset.
 
-    It seems that it has to have THIS docstring with a summary line,
-    a blank line.
-    and some more text like here. Wow.
     """
 
     def __init__(self):
@@ -31,12 +24,12 @@ class PreProcess():
 
     def missing_value(self, df):
         """
-        Remove dataset rows that have all null or education column
+        Removes dataset rows that have all null or education column
         or essay columns are null.
 
         :param df: Original dataset
         :type df: DataFrame
-        :return: dataSet without null values in important columns
+        :return: dataSet without null values in essays and education columns
         :rtype: DataFrame
         """
         print('\033[1m \033[94m Original dataset shape:\033[0m \033[0m {}\n'.format(df.shape))
@@ -59,22 +52,44 @@ class PreProcess():
         return df
 
     def merge_essay(self, df):
+        """
+        Merges the essayes number 0, 1, 2, 3, 7, 8, 9 as a sinigle text.
+
+        :param df: Original dataset
+        :type df: DataFrame
+        :return: dataframe including joint texts
+        :rtype: DataFrame
+        """
+
         df['text'] = df['essay0'].fillna('') + ' ' + df['essay1'].fillna('') + ' ' + df['essay2'].fillna('') + ' ' + df[
             'essay3'].fillna('') + ' ' + df['essay7'].fillna('') + ' ' + df['essay8'].fillna('') + ' ' + df[
                          'essay9'].fillna('')
         print(colored('essays are merged now!', 'green'))
-
-
-
         return df
 
     def remove_tag(self, df):
+        """
+        Removes htmls tags and newlines.
+
+        :param df: Original dataset
+        :type df: DataFrame
+        :return: df text without html tags and newlines
+        :rtype: DataFrame
+        """
         df['text'] = df['text'].replace('<[^<]+?>', '', regex=True)
         df['text'] = df['text'].replace("\n", "", regex=True)
         print(colored('html tags are removed!', 'green'))
         return df
 
     def count_words_sentences(self, df):
+        """
+        Calculates the avarage number of words per sentence
+
+        :param df: Original dataset
+        :type df: DataFrame
+        :return: df including new column named #anwps
+        :rtype: DataFrame
+        """
         df = df.dropna(subset=['text'])
         # split text to words
         df['words'] = df.apply(lambda row: nltk.word_tokenize(row['text']), axis=1)
@@ -155,16 +170,35 @@ class PreProcess():
 
         df['isced'] = df['education']
         df = df.replace(dict(isced=dic))
-        df.isced[df['isced'] == '-1'] = "None"
+        df.isced[df['isced'] == '-1'] = None
         df.dropna(subset=['isced'])
         print(colored('education column is coded...', 'green'))
+
+        inv_dic = {
+            '0':'Early childhood Education',
+            '1': 'Primary education',
+            '2': 'Lower secondary education',
+            '3': 'Upper secondary education',
+            '4': 'Post-secondary non-tertiary education',
+            '5': 'Short-cycle tertiary education',
+            '6': 'Bachelor or equivalent',
+            '7': 'Master or equivalent',
+            '8': 'Doctoral or equivalent',
+        }
+
+        df['isced2'] = df['isced']
+        df = df.replace(dict(isced2=inv_dic))
+        # df.isced[df['isced2'] == '-1'] = "None"
+        df.dropna(subset=['isced2'])
+        print(colored('education column is coded again...', 'green'))
+
 
         return df
 
     def text_cleaning(self, df):
-        # Remove punctuation
+        # Remove punctuations
         def remove_punctuation(s):
-            s = ''.join([i for i in s if i not in frozenset(string.punctuation)])
+            s = ' '.join([i for i in s if i not in frozenset(string.punctuation)])
             return s
 
         df['removed_punctuation'] = df.apply(lambda x: remove_punctuation(x['text']), axis=1)
@@ -181,5 +215,6 @@ class PreProcess():
         df.removed_stopwords = df.removed_stopwords.str.replace('\d+', '')
         df.dropna(subset=['removed_stopwords'])
         df.rename(columns={'removed_stopwords': 'clean_text'}, inplace=True)
+
         print(colored('text is clean...', 'green'))
         return df
