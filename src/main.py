@@ -1,8 +1,6 @@
 """
 This page contains functions for pre_processing OkCupid data_set.
 
-It seems that it has to have THIS docstring with a summary line, a blank line
-and some more text like here. Wow.
 """
 import pre_processing
 import analyse
@@ -39,8 +37,8 @@ def main_func(pprocess=False, analyze=False, meta=False, classification=False,
         # Final message
         print(colored('preprocessed_cupid.csv is written in data/preprocessed\
          folder...', 'red'))
-    # ************************************************************************
 
+    # ************************************************************************
     # Do analyses task
     elif(analyze):
         # Read pre_processed data_set with limited columns
@@ -120,8 +118,8 @@ def main_func(pprocess=False, analyze=False, meta=False, classification=False,
         # Final message
         print(colored('stylo_cupid.csv is written in data/preprocessed\
                  folder...', 'red'))
-    # **************************************************************************
 
+    # **************************************************************************
     if(classification):
         cls = classify.Classifier()
         df_cls = pd.read_csv(r'../data/processed/stylo_cupid2.csv')
@@ -167,13 +165,9 @@ def main_func(pprocess=False, analyze=False, meta=False, classification=False,
         ---
 """
 
-main_func(pprocess=False)
+main_func(pprocess=True)
 main_func(analyze=False, func='plot', type='isced_freq', sex=False)
 # main_func(analyze=False, func='plot', type='sex_age')
 main_func(meta=False)
-main_func(classification=True)
+main_func(classification=False)
 
-
-
-# TODO: add list of education levels
-# TODO: documentation
