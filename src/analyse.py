@@ -2,9 +2,9 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from collections import Counter
-from wordcloud import WordCloud, STOPWORDS
+from termcolor import colored
+from wordcloud import WordCloud
 
-# %matplotlib inline
 sns.set(color_codes=True)
 
 
@@ -26,34 +26,37 @@ class Analyse():
     def plot_func(self, df, type='#anwps_freq', sex=False):
         if type == '#anwps_freq':
             # Plot histogram for avarage number of words per sentence
-            sns.distplot(df["#anwps"], kde=False).set_title("Histogram of of avarage number of words per sentence")
+            sns.distplot(df["#anwps"], kde=False).set_title(
+                "Histogram of of avarage number of words per sentence")
             plt.show()
 
-        elif type == 'isced_freq' and sex==True:
-            # Plot frequency of participants based of their sex and level of education
-            df.groupby(['sex']).isced.value_counts().unstack(0).plot.barh(figsize=(10, 10))
+        elif type == 'isced_freq' and sex:
+            # Plot frequency of participants based on their
+            #  sex and level of education
+            df.groupby(['sex']).isced2.value_counts().unstack(0).plot.barh(figsize=(10, 10))
             plt.title("Frequency of participants based of their sex and level of education")
             plt.show()
-        elif type=='isced' and sex==False:
+        elif type == 'isced_freq' and not sex:
             n = df.shape[0]
             df = df.groupby('isced').count() / n
             df.sort_values(['#anwps'], ascending=False, inplace=True)
 
             df['#anwps'].plot(kind='bar')
+            plt.title("Frequency of participants based on their level of education")
             plt.show()
 
-        elif type == 'boxplot' and sex == False:
+        elif type == 'boxplot' and not sex:
             # Create a boxplot
-            sns.boxplot(df["#anwps"]).set_title("Boxplot of the avarage number of words per sentence")
+            sns.boxplot(df["#anwps"]).set_title("Boxplot of the average number of words per sentence")
             plt.show()
 
-        elif type == 'boxplot' and sex == True:
+        elif type == 'boxplot' and sex:
             # Plot boxplot of #anwps for men and women
             df.groupby(['sex'])['#anwps'].value_counts().unstack(0).boxplot(figsize=(10, 10))
             plt.title("Boxplot of the average number of words per sentence for men and women")
             plt.show()
 
-        elif type=='common_words':
+        elif type == 'common_words':
             df = df.dropna(subset=['clean_text'])
             top = Counter(" ".join(df["clean_text"]).split()).most_common(30)
             top = top[::-1]
@@ -69,7 +72,7 @@ class Analyse():
             plt.yticks(x_pos, x)
             plt.show()
 
-        elif type=='word_cloud':
+        elif type == 'word_cloud':
             # Plot wordcloud of 100 most frequent words
             wordcloud = WordCloud(
                 width=3000,
@@ -87,13 +90,27 @@ class Analyse():
             plt.title("Wordcloud of 100 most frequent words")
             plt.show()
 
+        elif type == 'age_sex':
+            # Plot frequency of participants based of their sex and age
+            df.groupby(['age']).sex.value_counts().unstack(0).plot.barh(figsize=(10, 10))
+            plt.title("Frequency of participants based of their sex and age")
+            plt.show()
+
+        else:
+            print(colored('please select a valid type for plot!', 'red'))
 
 
-
-
-
-# cupid_df = pd.read_csv('../data/processed/preprocessed_cupid.csv', usecols = ['education', 'age', 'sex', 'text',
-#                                 'isced', '#words', '#sentences', '#anwps', 'removed_stopwords'])
-# cupid_df.rename(columns={'removed_stopwords': 'clean_text'}, inplace=True)
-# a = Analyse()
-# a.plot_func(cupid_df, type='word_cloud')
+if __name__ == "__main__":
+    cupid_df = pd.read_csv('../data/processed/preprocessed_cupid.csv',
+                           usecols=['education',
+                                    'age',
+                                    'sex',
+                                    'text',
+                                    'isced',
+                                    '#words',
+                                    '#sentences',
+                                    '#anwps',
+                                    'removed_stopwords'])
+    cupid_df.rename(columns={'removed_stopwords': 'clean_text'}, inplace=True)
+    a = Analyse()
+    a.plot_func(cupid_df, type='word_cloud')
